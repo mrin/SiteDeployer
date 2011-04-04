@@ -1,9 +1,10 @@
-
 /**
  * Module dependencies.
  */
 
-var express = require('express');
+require.paths.unshift(__dirname + '/vendor/express/support');
+
+var express = require('./vendor/express');
 
 var app = module.exports = express.createServer();
 

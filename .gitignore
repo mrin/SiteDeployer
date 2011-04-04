@@ -6,3 +6,4 @@ test
 logs/*
 pids/*
 public/_src/
+nodemon
