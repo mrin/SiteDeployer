@@ -1,0 +1,8 @@
+.DS_Store
+.idea
+.monitor
+nodemon-ignore
+test
+logs/*
+pids/*
+public/_src/

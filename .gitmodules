@@ -1,0 +1,7 @@
+[submodule "vendor/express"]
+	path = vendor/express
+	url = git://github.com/visionmedia/express.git
+
+[submodule "vendor/nodemon"]
+	path = vendor/nodemon
+	url = git://github.com/remy/nodemon.git
