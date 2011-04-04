@@ -5,3 +5,7 @@
 [submodule "vendor/nodemon"]
 	path = vendor/nodemon
 	url = git://github.com/remy/nodemon.git
+
+[submodule "vendor/node-mongo-native"]
+	path = vendor/node-mongo-native
+	url = git://github.com/christkv/node-mongodb-native.git
