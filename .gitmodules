@@ -1,11 +1,24 @@
 [submodule "vendor/express"]
 	path = vendor/express
 	url = git://github.com/visionmedia/express.git
-
 [submodule "vendor/nodemon"]
 	path = vendor/nodemon
 	url = git://github.com/remy/nodemon.git
-	
 [submodule "vendor/node-dbi"]
 	path = vendor/node-dbi
 	url = git://github.com/DrBenton/Node-DBI.git
+[submodule "vendor/node-ssh"]
+	path = vendor/node-ssh
+	url = git://github.com/FlashFan/NodeSSH.git
+[submodule "vendor/async"]
+	path = vendor/async
+	url = git://github.com/caolan/async.git
+[submodule "vendor/express-messages"]
+	path = vendor/express-messages
+	url = git://github.com/visionmedia/express-messages.git
+[submodule "vendor/underscore"]
+	path = vendor/underscore
+	url = https://github.com/grayrest/underscore.git
+[submodule "vendor/mysql"]
+	path = vendor/mysql
+	url = https://github.com/felixge/node-mysql.git

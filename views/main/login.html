@@ -1,0 +1,27 @@
+<div class="content_block login_block">
+<form action="/login" method="post">
+<table class="login_wfr">
+    <col width="155px">
+    <col>
+    <tr>
+        <td colspan="2"><%- messages() %></td>
+    </tr>
+    <tr>
+        <td><label for="login_name">Login</label> </td>
+        <td><input type="text" name="username" id="login_name" required></td>
+    </tr>
+    <tr>
+        <td><label for="login_pass">Password</label> </td>
+        <td><input type="password" name="password" id="login_pass" required></td>
+    </tr>
+    <tr>
+        <td> </td>
+        <td>
+        <button class="btn right" type="submit">Login</button>
+        <!--<a href="/forgot" class="frgt">Forgot password?</a> -->
+
+        </td>
+    </tr>
+</table>
+</form>
+</div><!--/.block_login-->
