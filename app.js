@@ -48,13 +48,12 @@ app.dynamicHelpers({
   }
 });
 
-var user = require('./models/user.js');
-
 // Routes
-require('./routes/main.js')(app,user);
+require('./routes/main.js')(app);
+require('./routes/project.js')(app);
 
 // Only listen on $ node app.js
 if (!module.parent) {
-  app.listen(3000);
+  app.listen(3001);
   console.log("Express server listening on port %d", app.address().port);
 }

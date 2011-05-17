@@ -1,11 +1,56 @@
 <!DOCTYPE HTML>
-<html class="login_page">
+<html class="deb ug">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>Site Deployer</title>
-<link rel="stylesheet" href="../css/uploader.css">
+<link rel="stylesheet" href="/css/uploader.css">
 </head>
-<%- body %>
+
 <body>
+<div class="page">
+	<div class="main_wrapper">
+	
+	<header class="page_header clearfix">
+		<nav>
+			<ul class="nav_links">
+				<li><a href="/projects">Project list</a></li>
+				<li><a href="/cvs">Manage CVS</a></li>
+				<li><a href="/project/add">Add project</a></li>
+				<li class="lnk-logout"><a href="/logout">Logout</a></li>
+			</ul>
+		</nav>
+		
+		<div class="block_search_top">
+		<form action="" class="box_search">
+			<input type="text" name="" id="" class="search_text" placeholder="search">
+			<input type="submit" value="" name="" id="" class="search_go">
+		</form>
+		</div>
+		
+	</header>
+
+    <div class="page_content">
+	<%- body %>
+	</div>
+	<!--/.page-content-->
+	
+	</div><!--/.mainWrapper-->
+	
+</div>
+<footer class="page_footer">
+	<div class="footer_inner clearfix">
+		<ul class="compact horis left footer_nav">
+			<li><a href="/projects">Project list</a></li>
+			<li><a href="/cvs">Manage CVS</a></li>
+			<li><a href="/project/add">Add projects</a></li>
+		</ul>
+		
+		<form action="" class="box_search right">
+			<input type="text" name="" id="" class="search_text" placeholder="search">
+			<input type="submit" value="" name="" id="" class="search_go">
+		</form>
+
+	</div><!--/.footer_inner-->
+</footer>
 </body>
 </html>

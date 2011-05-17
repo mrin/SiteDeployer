@@ -1,16 +1,17 @@
+var user = require('../models/user.js');
 
-module.exports = function Main(app, user) {
+module.exports = function Main(app) {
 
     app.get('/', function(req, res){
         if (!req.session.user) {
-           res.redirect('/login')
+            res.redirect('/login')
         } else {
-            res.redirect('/home');
+            res.redirect('/projects');
         }
     });
 
     app.get('/login', function(req, res){
-        res.render('main/login');
+        res.render('main/login', {layout:'layout_login'});
     });
 
     app.post('/login', function(req, res){
@@ -18,7 +19,7 @@ module.exports = function Main(app, user) {
             if (user) {
                 req.session.regenerate(function(){
                     req.session.user = user;
-                    res.redirect('/home');
+                    res.redirect('/projects');
                 });
             } else {
                 req.flash('error', 'Authentication failed');
@@ -34,9 +35,4 @@ module.exports = function Main(app, user) {
         res.redirect('/login');
       });
     });
-
-    app.get('/home', user.restrict, function(req, res){
-      res.send('Wahoo! restricted area');
-    });
-
 };

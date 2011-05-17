@@ -878,10 +878,12 @@ body{
 }
 
 #messages {
-    text-align:center;
+
 }
 
 #messages ul {
+    margin:0;
+    padding:0;
     list-style:none;
 }
 
@@ -891,7 +893,11 @@ body{
 }
 
 #messages .error {
-    color:yellow;
+    color:#ffff00;
+}
+
+#messages .info {
+    color:#adff2f;
 }
 
 
