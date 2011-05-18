@@ -1,0 +1,16 @@
+<tr>
+    <td class="t_center"><%=row.id%></td>
+    <td><a href="/deploy/<%=row.id%>"><%=row.name%></a></td>
+    <td class="t_center">
+        <% if(row.user_id) {%>
+        <a href="/user/<%=row.user_id%>"><%=row.login%></a>
+        <% } else { %>-<% } %>
+    </td>
+    <td class="t_center">
+        <% if(row.lastdeploy_date) {%>
+        <%=row.lastdeploy_date%>
+        <%} else {%>-<% } %>
+    </td>
+    <td class="t_center"><a href="/history/<%=row.id%>" class="btn">View history</a></td>
+    <td class="t_center"><a href="/project/edit/<%=row.id%>" class="btn" style="min-width:40px">Edit</a></td>
+</tr>

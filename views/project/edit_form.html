@@ -1,0 +1,119 @@
+<h1>Edit project</h1>
+<form method="post">
+<div class="breadcrumbs">
+    Project Name: <input type="text" name="project[name]" value="<%=project.name%>" style="width:250px;">
+    <span style="padding-left:20px;"><a href="/cvs">Manage CVS accounts</a></span>
+    <div style="float:right;padding-top:5px;"><%- messages() %></div>
+</div>
+
+<table class="data_table w-100 no_stripes">
+    <colgroup>
+        <col width="50%">
+        <col width="50%">
+    </colgroup>
+    <thead>
+        <tr>
+            <th>Dev server</th>
+            <th>Live server</th>
+        </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>
+
+        <table class="w-100 wfr_form">
+            <col width="50%">
+            <col width="50%">
+            <tr>
+                <td><label for="">Host name</label></td>
+                <td><input type="text" name="project[dev_hostname]" value="<%=project.dev_hostname%>" class="w-100"></td>
+            </tr>
+            <tr>
+                <td><label for="">Host IP</label></td>
+                <td><input type="text" name="project[dev_hostip]" value="<%=project.dev_hostip%>" class="w-100"></td>
+            </tr>
+            <tr>
+                <td><label for="">SSH username</label></td>
+                <td><input type="text" name="project[dev_ssh_username]" value="<%=project.dev_ssh_username%>" class="w-100"></td>
+            </tr>
+            <tr>
+                <td><label for="">SSH password</label></td>
+                <td><input type="password" name="project[dev_ssh_password]" value="<%=project.dev_ssh_password%>" class="w-100"></td>
+            </tr>
+            <tr>
+                <td><label for="">Account dir</label></td>
+                <td><input type="text" name="project[dev_home_dir]" value="<%=project.dev_home_dir%>" class="w-100"></td>
+            </tr>
+            <tr>
+                <td><label for="">Site dir</label></td>
+                <td><input type="text" name="project[dev_www_dir]" value="<%=project.dev_www_dir%>" class="w-100"></td>
+            </tr>
+            <tr>
+                <td><label for="">Choose Subversion</label></td>
+                <td>
+                    <%- partial('partials/selectbox', { param:{name:'project[dev_version_id]', value:project.dev_version_id, values:cvsRows} }) %>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="">Subversion path</label></td>
+                <td><input type="text" name="project[dev_version_path]" value="<%=project.dev_version_path%>" class="w-100"></td>
+            </tr>
+        </table>
+
+        </td>
+        <td>
+
+            <table class="w-100 wfr_form">
+                <col width="50%">
+                <col width="50%">
+                <tr>
+                    <td><label for="">Host name</label></td>
+                    <td><input type="text" name="project[prod_hostname]" value="<%=project.prod_hostname%>" class="w-100"></td>
+                </tr>
+                <tr>
+                    <td><label for="">Host IP</label></td>
+                    <td><input type="text" name="project[prod_hostip]" value="<%=project.prod_hostip%>" class="w-100"></td>
+                </tr>
+                <tr>
+                    <td><label for="">SSH username</label></td>
+                    <td><input type="text" name="project[prod_ssh_username]" value="<%=project.prod_ssh_username%>" class="w-100"></td>
+                </tr>
+                <tr>
+                    <td><label for="">SSH password</label></td>
+                    <td><input type="password" name="project[prod_ssh_password]" value="<%=project.prod_ssh_password%>" class="w-100"></td>
+                </tr>
+                <tr>
+                    <td><label for="">Account dir</label></td>
+                    <td><input type="text" name="project[prod_home_dir]" value="<%=project.prod_home_dir%>" class="w-100"></td>
+                </tr>
+                <tr>
+                    <td><label for="">Site dir</label></td>
+                    <td><input type="text" name="project[prod_www_dir]" value="<%=project.prod_www_dir%>" class="w-100"></td>
+                </tr>
+                <tr>
+                    <td><label for="">Choose Subversion</label></td>
+                    <td>
+                        <%- partial('partials/selectbox', { param:{name:'project[prod_version_id]', value:project.prod_version_id, values:cvsRows} }) %>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="">Subversion path</label></td>
+                    <td><input type="text" name="project[prod_version_path]" value="<%=project.prod_version_path%>" class="w-100"></td>
+                </tr>
+            </table>
+
+        </td>
+    </tr>
+    <tr>
+        <td class="t_center" colspan="2">
+        <input type="submit" value="Save" class="btn btn_big">
+        </td>
+    </tr>
+    <tr>
+        <td class="t_center" colspan="2">
+        <a href="/project/delete/<%=project.id%>" rel="confirm" title="Are you sure ?">Delete project</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</form>

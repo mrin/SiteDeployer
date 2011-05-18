@@ -1,0 +1,57 @@
+<h1>Edit CVS</h1>
+<form method="post">
+<div class="breadcrumbs">
+    <a href="/cvs">Manage CVS</a> / Edit
+</div>
+<table class="data_table w-100 no_stripes">
+    <thead>
+        <tr>
+            <th>CVS server information</th>
+        </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>
+        <div style="text-align:center"><%- messages() %></div>
+        <div style="width:350px;margin:0 auto;">
+        <table class="wfr_form" style="width:350px;">
+            <col width="100">
+            <col width="250">
+            <tr>
+                <td><label for="">Choose type</label></td>
+                <td>
+                    <%- partial('partials/selectbox', { param:{name:'cvs[type]', value:cvs.type, values:types} }) %>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="">Title</label></td>
+                <td><input type="text" name="cvs[name]" value="<%=cvs.name%>" class="w-100"></td>
+            </tr>
+            <tr>
+                <td><label for="">URL</label></td>
+                <td><input type="text" name="cvs[url]" value="<%=cvs.url%>" class="w-100"></td>
+            </tr>
+            <tr>
+                <td><label for="">User name</label></td>
+                <td><input type="text" name="cvs[username]" value="<%=cvs.username%>" class="w-100"></td>
+            </tr>
+            <tr>
+                <td><label for="">Password</label></td>
+                <td><input type="password" name="cvs[password]" value="<%=cvs.password%>" class="w-100"></td>
+            </tr>
+        </table></div>
+        </td>
+    </tr>
+    <tr>
+        <td class="t_center">
+        <input type="submit" value="Save" class="btn btn_big">
+        </td>
+    </tr>
+    <tr>
+        <td class="t_center">
+        <a href="/cvs/delete/<%=cvs.id%>" rel="confirm" title="Are you sure ?">Delete CVS info</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</form>

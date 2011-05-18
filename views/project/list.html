@@ -1,0 +1,31 @@
+<h1>Project list</h1>
+
+<table class="data_table w-100">
+    <colgroup>
+        <col class="col_id" width="5%">
+        <col class="col_project" width="*">
+        <col class="t_center" width="15%">
+        <col class="col_date" width="25%">
+        <col class="col_id" width="15%">
+        <col class="col_id" width="50">
+    </colgroup>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th class="t_left">Project name</th>
+            <th>Deployed by</th>
+            <th>Deploy date</th>
+            <th>Revision</th>
+            <th width="50">&nbsp;</th>
+        </tr>
+    </thead>
+    <tbody>
+    <% if(projects.length) {%>
+    <%- partial('row', projects) %>
+    <% } else {%>
+    <tr>
+        <td colspan="6">Project list is empty yet. <a href="/project/add">Add new</a></td>
+    </tr>
+    <% } %>
+    </tbody>
+</table>
