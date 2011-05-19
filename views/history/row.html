@@ -1,0 +1,7 @@
+<tr>
+    <td style="white-space:nowrap;"><%=row.date%></td>
+    <td class="t_center"><%=row.login%></td>
+    <td class="t_center"><a href="/history/<%=project.id%>/detail/<%=row.id%>"><%=row.revision%></a></td>
+    <td class="t_center"><%-history.getStatusName(row.status)%></td>
+    <td class="t_center"><a href="/history/<%=project.id%>/detail/<%=row.id%>" class="btn">View details</a></td>
+</tr>

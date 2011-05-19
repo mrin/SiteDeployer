@@ -1,0 +1,30 @@
+<h1>Deploy details</h1>
+<div class="breadcrumbs">
+    <a href="/projects">Project list</a> \ <a href="/history/<%=project.id%>">Deploy history of [<%=project.name%>]</a>
+</div>
+
+<div class="content_block">
+    <div class="content_header">
+    [<%=project.name%>] [status:<%-history.getStatusName(row.status)%>] [<%=row.date%>]
+    </div>
+
+    <div class="content_bd">
+        <h3>Process log</h3>
+        <p>
+            <%=row.logs%>
+        </p>
+
+        <h3>Revision #<%=row.revision%></h3>
+        <ul class="listing">
+            <li><a href="#1">CamCity/trunk/www/_src/html/iframe-models-large.html</a></li>
+            <li><a href="#1">CamCity/trunk/www/_src/html/iframe-models-large.html</a></li>
+            <li><a href="#1">CamCity/trunk/www/_src/html/iframe-models-large.html</a></li>
+            <li><a href="#1">CamCity/trunk/www/_src/html/iframe-models-large.html</a></li>
+            <li><a href="#1">CamCity/trunk/www/_src/html/iframe-models-large.html</a></li>
+            <li><a href="#1">CamCity/trunk/www/_src/html/iframe-models-large.html</a></li>
+        </ul>
+
+    <a class="btn" href="/history/<%=project.id%>">Back</a>
+
+    </div><!--/.content_bd-->
+</div><!--/.content_block-->

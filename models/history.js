@@ -1,26 +1,28 @@
 var user = require('../models/user.js');
 var DB = require('../utils/db-connection.js');
 
-var cvsTypes = [
-    {id:1, name:'GIT'},
-    {id:2, name:'SVN'}
+var statuses = [
+    {id:0, name:'In progress'},
+    {id:1, name:'Complete'},
+    {id:2, name:'Error'}
     ];
 
-var CVS = exports = module.exports = function CVS(){
+var History = exports = module.exports = function History(){
     this.id = 0;
-    this.type = 0;
-    this.name = '';
+    this.project_id = 0;
+    this.user_id = 0;
+    this.status = 0;
 
-    this.url = '';
-    this.username = '';
-    this.password = '';
+    this.date = '';
+    this.revision = '';
+    this.logs = '';
 };
 
 /**
- * Save CVS (insert / update)
+ * Save History (insert / update)
  * @param cb
  */
-CVS.prototype.save = function(cb){
+History.prototype.save = function(cb){
     if (3 >= this.name.length) return false;
 
     var updateFields = Array();
@@ -33,11 +35,11 @@ CVS.prototype.save = function(cb){
     }
 
     if (0 == this.id) {
-        DB.query('INSERT INTO versions SET ' + updateFields.join(','), function(err, results, fields){
+        DB.query('INSERT INTO project_history SET ' + updateFields.join(','), function(err, results, fields){
                     cb(results.insertId);
                     });
     } else {
-        DB.query('UPDATE versions SET ' + updateFields.join(',') +
+        DB.query('UPDATE project_history SET ' + updateFields.join(',') +
                   'WHERE id = ' + this.id,
                   function(err, results, fields){
                      cb(results.affectedRows);
@@ -45,25 +47,13 @@ CVS.prototype.save = function(cb){
     }
 };
 
-/**
- * Remove CVS info
- */
-CVS.prototype.remove = function(){
-    if (0 == this.id) return false;
-     DB.query('DELETE FROM versions WHERE id=' + this.id);
-};
-
-exports.getTypes = function() {
-    return cvsTypes;
-};
-
-exports.getTypeName = function(type) {
-    for(var i = 0; i < cvsTypes.length; i++)
-        if (type == cvsTypes[i].id) return cvsTypes[i].name;
+exports.getStatusName = function(type) {
+    for(var i = 0; i < statuses.length; i++)
+        if (type == statuses[i].id) return statuses[i].name;
 };
 
 /**
- * Fill CVS with values
+ * Fill History with values
  *
  * @param object
  * @param data
@@ -81,13 +71,17 @@ exports.fillObject = function(obj, data){
 };
 
 /**
- * Get list of all CVS accounts
- *
- * @param callback cb
- * @return array of records
+ * Get list of history by Project ID
+ * 
+ * @param projectId
+ * @param cb
  */
-exports.getCVSs = function(cb){
-    DB.query('SELECT * FROM versions ORDER BY id',
+exports.getHistoryByProject = function(projectId, cb){
+    DB.query('SELECT ph.*, u.login' +
+            ' FROM project_history AS ph' +
+            ' LEFT JOIN user AS u ON u.id = ph.user_id ' +
+            ' WHERE ph.project_id = ' + projectId +
+            ' ORDER BY ph.id DESC',
             function(err, results, fields){
                 if (!results.length) return cb(false);
                 return cb(results);
@@ -95,15 +89,18 @@ exports.getCVSs = function(cb){
 };
 
 /**
- * Get cvs account by ID
+ * Get detailed history
  *
- * @param id
+ * @param historyId
  * @param cb
  */
-exports.getCVS = function(id, cb){
-    DB.query('SELECT * FROM versions WHERE id = ' + id,
+exports.getHistoryDetailed = function(historyId, cb){
+    DB.query('SELECT ph.*, u.login' +
+            ' FROM project_history AS ph' +
+            ' LEFT JOIN user AS u ON u.id = ph.user_id ' +
+            ' WHERE ph.id = ' + historyId,
             function(err, results, fields){
                 if (!results.length) return cb(false);
-                return cb(exports.fillObject(new CVS(), results[0]));
+                return cb(results[0]);
             });
 };

@@ -46,7 +46,6 @@ Project.prototype.save = function(cb){
 
     if (0 == this.id) {
         DB.query('INSERT INTO project SET ' + updateFields.join(','), function(err, results, fields){
-                    console.log(err,results,fields);
                     cb(results.insertId);
                     });
     } else {

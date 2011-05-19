@@ -1,0 +1,33 @@
+<h1>Deploy history of [<%=project.name%>]</h1>
+
+<div class="breadcrumbs">
+    <a href="/projects">Project list</a>
+</div>
+
+<table class="data_table w-100">
+    <colgroup>
+        <col class="col_project">
+        <col class="t_center">
+        <col class="col_date">
+        <col class="col_id">
+        <col class="col_id">
+    </colgroup>
+    <thead>
+        <tr>
+            <th>Deploy date</th>
+            <th>Deploy by</th>
+            <th>Revision #</th>
+            <th>Status</th>
+            <th width="50">&nbsp;</th>
+        </tr>
+    </thead>
+    <tbody>
+    <% if(rows.length) {%>
+    <%- partial('row', {collection: rows, project: project, history: history}) %>
+    <% } else {%>
+    <tr>
+        <td colspan="5">Project has never been deployed. <a href="/deploy/<%=project.id%>">Do first deploy now!</a></td>
+    </tr>
+    <% } %>
+    </tbody>
+</table>

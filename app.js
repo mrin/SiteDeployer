@@ -27,13 +27,12 @@ app.configure(function(){
 
 // Example 500 page
 app.error(function(err, req, res){
-    console.dir(err)
     res.render('500');
 });
 
 // Example 404 page via simple Connect middleware
 app.use(function(req, res){
-    res.render('404');
+    res.render('404', {request: req});
 });
 
 app.dynamicHelpers({
@@ -52,6 +51,7 @@ app.dynamicHelpers({
 require('./routes/main.js')(app);
 require('./routes/project.js')(app);
 require('./routes/cvs.js')(app);
+require('./routes/history.js')(app);
 
 // Only listen on $ node app.js
 if (!module.parent) {
