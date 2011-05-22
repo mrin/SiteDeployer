@@ -33,6 +33,10 @@
                 <td><input type="text" name="project[dev_hostip]" value="<%=project.dev_hostip%>" class="w-100"></td>
             </tr>
             <tr>
+                <td><label for="">SSH port</label></td>
+                <td><input type="text" name="project[dev_ssh_port]" value="<%=project.dev_ssh_port%>" class="w-100"></td>
+            </tr>
+            <tr>
                 <td><label for="">SSH username</label></td>
                 <td><input type="text" name="project[dev_ssh_username]" value="<%=project.dev_ssh_username%>" class="w-100"></td>
             </tr>
@@ -73,6 +77,10 @@
                 <tr>
                     <td><label for="">Host IP</label></td>
                     <td><input type="text" name="project[prod_hostip]" value="<%=project.prod_hostip%>" class="w-100"></td>
+                </tr>
+                <tr>
+                    <td><label for="">SSH port</label></td>
+                    <td><input type="text" name="project[prod_ssh_port]" value="<%=project.prod_ssh_port%>" class="w-100"></td>
                 </tr>
                 <tr>
                     <td><label for="">SSH username</label></td>

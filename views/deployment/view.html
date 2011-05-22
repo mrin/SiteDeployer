@@ -1,0 +1,44 @@
+<script type="text/javascript" src="/faye.js"></script>
+<script type="text/javascript" src="/js/jquery.deploy.js"></script>
+
+<h1>Deployment - <%-project.name%></h1>
+<div class="breadcrumbs">
+    <a href="/projects">Project list</a></a>
+</div>
+
+<div class="content_block">
+    <div class="content_header" style="text-align:center;">
+    Progress viewer
+    </div>
+
+    <div class="content_bd">
+    <div rel="stop_btns" style="display:none; padding-bottom:15px; text-align:center;">
+        <a href="#" class="btn" rel="stop_btn">STOP PROCESS</a>
+    </div>
+
+    <div rel="start_btns">
+        <div style="float:right;">
+            Production:
+            <a class="btn" rel="prod_deploy_btn" href="#">DEPLOY</a>
+            <a class="btn" rel="prod_rollback_btn" href="#">ROLLBACK</a>
+        </div>
+        <div style="float:left;">
+            Development:
+            <a class="btn" rel="dev_deploy_btn" href="#">DEPLOY</a>
+            <a class="btn" rel="dev_rollback_btn" href="#">ROLLBACK</a>
+        </div>
+        <div style="clear:both;">&nbsp;</div>
+    </div>
+
+    <div class="w-100" style="overflow-x:hidden; margin:0 auto; height:500px; font-size:14px; border:1px solid #ccc; background-color:#2e3137;">
+        <div id="process_area" style="margin:5px;">
+            -> Click button for start process</br>
+        </div>
+    </div>
+
+    <div rel="stop_btns" style="display:none; text-align:center; padding-top:20px;">
+        <a href="#" class="btn" rel="stop_btn">STOP PROCESS</a>
+    </div>
+
+    </div><!--/.content_bd-->
+</div><!--/.content_block-->

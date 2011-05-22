@@ -1,5 +1,13 @@
 var user = require('../models/user.js');
+var cvs = require('../models/cvs.js');
 var DB = require('../utils/db-connection.js');
+var str = require('../utils/string.js');
+var ejs = require('ejs');
+var fs = require('fs');
+var async = require('async');
+
+var deployTemplatePath = __dirname + '/../deploy_templates/';
+var defTemplatePath = __dirname + '/../views/_default/';
 
 var Project = exports = module.exports = function Project(){
     this.id = 0;
@@ -13,18 +21,20 @@ var Project = exports = module.exports = function Project(){
     this.dev_hostip = '';
     this.dev_ssh_username = '';
     this.dev_ssh_password = '';
+    this.dev_ssh_port= 22;
     this.dev_home_dir = '';
     this.dev_www_dir = '';
-    this.dev_version_id = '';
+    this.dev_version_id = 0;
     this.dev_version_path = '';
 
     this.prod_hostname = '';
     this.prod_hostip = '';
     this.prod_ssh_username = '';
     this.prod_ssh_password = '';
+    this.prod_ssh_port = 22;
     this.prod_home_dir = '';
     this.prod_www_dir = '';
-    this.prod_version_id = '';
+    this.prod_version_id = 0;
     this.prod_version_path = '';
 };
 
@@ -43,17 +53,27 @@ Project.prototype.save = function(cb){
             updateFields.push(fieldName + ' = \'' + this[fieldName] + '\'');
         }
     }
-
+    var self = this;
     if (0 == this.id) {
         DB.query('INSERT INTO project SET ' + updateFields.join(','), function(err, results, fields){
-                    cb(results.insertId);
-                    });
+            if(err) return cb(false);
+            self.id = results.insertId;
+
+            exports.createDeployTemplate(self, function(err){
+                if (err) console.log('Deploy template is not created', err);
+                cb(results.insertId);
+            });
+
+        });
     } else {
-        DB.query('UPDATE project SET ' + updateFields.join(',') +
-                  'WHERE id = ' + this.id,
-                  function(err, results, fields){
-                     cb(results.affectedRows);
-                  });
+        DB.query('UPDATE project SET ' + updateFields.join(',') + 'WHERE id = ' + this.id, function(err, results, fields){
+            if(err) return cb(false);
+
+            exports.createDeployTemplate(self, function(err){
+                if(err) console.log('Deploy template is not created', err);
+                cb(results.affectedRows);
+            });
+        });
     }
 };
 
@@ -63,6 +83,88 @@ Project.prototype.save = function(cb){
 Project.prototype.remove = function() {
     if (0 == this.id) return false;
     DB.query('DELETE FROM project WHERE id=' + this.id);
+    exports.removeExistedTemplate(this.id);
+};
+
+/**
+ * Create a filled copy of Capfile & deploy.rb
+ *
+ * @param projectObj
+ * @param callback cb
+ */
+exports.createDeployTemplate = function(projectObj, cb) {
+
+    exports.removeExistedTemplate(projectObj.id, function(isSuccess){
+        if (!isSuccess) return cb(false);
+
+        // get CVS access for dev & prod env
+        async.series([
+            function(cb){
+                cvs.getCVS(projectObj.dev_version_id, function(cvsObj) {
+                    if (!cvsObj) return cb(null, null);
+                    return cb(null, cvsObj);
+                });
+            },
+            function(cb){
+                cvs.getCVS(projectObj.prod_version_id, function(cvsObj) {
+                    if (!cvsObj) return cb(null, null);
+                    return cb(null, cvsObj);
+                });
+            }
+        ],
+
+        function(err, cvsData){
+            // read default deploy recipe as template
+            fs.readFile(defTemplatePath + 'deploy.rb', 'utf8', function(err, data) {
+                if (err) return cb(err);
+
+                // fill template
+                var filledTemplate = ejs.render(data, {
+                    locals: {
+                        project: projectObj,
+                        cvsDev: !cvsData[0] ? new cvs() : cvsData[0], // given from async.series
+                        cvsProd: !cvsData[1] ? new cvs() : cvsData[1]
+                    }
+                });
+                
+                var projectTplPath = deployTemplatePath + projectObj.id;
+
+                // create folder for project
+                fs.mkdir(projectTplPath, 0755, function(err) {
+                    if (err) return cb(err);
+
+                    fs.symlink(defTemplatePath + 'Capfile', projectTplPath + '/Capfile', function(err) {
+                        if (err) return cb(err);
+
+                        fs.mkdir(projectTplPath + '/config', 0755, function(err) {
+                           if (err) return cb(err);
+
+                            // write filled template
+                            fs.writeFile(projectTplPath + '/config/deploy.rb', filledTemplate, function(err) {
+                                if (err) return cb(err);
+                                return cb(null);
+                            });
+                        });
+                    });
+                });
+            });
+        }
+        
+        );
+    });
+};
+
+/**
+ * Remove folder with deploy config
+ *
+ * @param projectId
+ * @param cb
+ */
+exports.removeExistedTemplate = function(projectId, cb) {
+    var exec = require('child_process').exec;
+    exec("rm -rf " + deployTemplatePath + projectId, function(err, stdout, stderr){
+        if (typeof cb == 'function') cb(true);
+    });
 };
 
 /**
@@ -77,7 +179,7 @@ exports.fillObject = function(project, data){
         if (undefined == project[fieldName]) continue;
         var value = data[fieldName];
         project[fieldName] = (typeof value == 'string')
-                                ? unescape(value.replace(/\+/g, " "))
+                                ? str.replaceHtmlEntites(value.replace(/\+/g, " "))
                                 : value;
     }
 
@@ -110,7 +212,30 @@ exports.getProjects = function(cb){
 exports.getProject = function(id, cb){
     DB.query('SELECT * FROM project WHERE id = ' + id,
             function(err, results, fields){
-                if (!results.length) return cb(false);
+                if (err || !results.length) return cb(false);
                 return cb(exports.fillObject(new Project(), results[0]));
             });
+};
+
+/**
+ * Update RECIPE's where using selected cvs server
+ * 
+ * @param cvsId
+ */
+exports.updateDeployTemplates = function(cvsId){
+    if (!cvsId) return;
+
+    DB.query('SELECT * FROM project WHERE dev_version_id = ? OR prod_version_id = ?',
+            [cvsId, cvsId],
+            function(err, results, fields){
+                if (!results.length) return;
+
+                for (var key = 0; key < results.length; key++) {
+                    var p = exports.fillObject(new Project(), results[key]);
+                    exports.createDeployTemplate(p, function(isSuccess){});
+                }
+
+                return;
+            }
+    );
 };

@@ -5,10 +5,16 @@
 require.paths.unshift(__dirname + '/vendor');
 require.paths.unshift(__dirname + '/vendor/express/support');
 
-var express = require('./vendor/express')
-   ,messages = require('./vendor/express-messages');
+var express = require('express')
+   ,messages = require('express-messages')
+   ,faye = require('faye');
 
 var app = module.exports = express.createServer();
+
+var bayeux = new faye.NodeAdapter({
+    mount: '/faye',
+    timeout: 45
+});
 
 // Configuration
 
@@ -52,9 +58,11 @@ require('./routes/main.js')(app);
 require('./routes/project.js')(app);
 require('./routes/cvs.js')(app);
 require('./routes/history.js')(app);
+require('./routes/deploy.js')(app, bayeux);
 
 // Only listen on $ node app.js
 if (!module.parent) {
-  app.listen(3000);
-  console.log("Express server listening on port %d", app.address().port);
+    bayeux.attach(app);
+    app.listen(3002);
+    console.log("Express server listening on port %d", app.address().port);
 }

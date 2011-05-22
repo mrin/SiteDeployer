@@ -1,5 +1,7 @@
 var user = require('../models/user.js');
 var DB = require('../utils/db-connection.js');
+var str = require('../utils/string.js');
+var async = require('async');
 
 var cvsTypes = [
     {id:1, name:'GIT'},
@@ -31,7 +33,7 @@ CVS.prototype.save = function(cb){
             updateFields.push(fieldName + ' = \'' + this[fieldName] + '\'');
         }
     }
-
+    var self = this;
     if (0 == this.id) {
         DB.query('INSERT INTO versions SET ' + updateFields.join(','), function(err, results, fields){
                     cb(results.insertId);
@@ -40,7 +42,7 @@ CVS.prototype.save = function(cb){
         DB.query('UPDATE versions SET ' + updateFields.join(',') +
                   'WHERE id = ' + this.id,
                   function(err, results, fields){
-                     cb(results.affectedRows);
+                    cb(results.affectedRows);
                   });
     }
 };
@@ -74,7 +76,7 @@ exports.fillObject = function(obj, data){
         if (undefined == obj[fieldName]) continue;
         var value = data[fieldName];
         obj[fieldName] = (typeof value == 'string')
-                                ? unescape(value.replace(/\+/g, " "))
+                                ? str.replaceHtmlEntites(value.replace(/\+/g, " "))
                                 : value;
     }
     return obj;
@@ -101,6 +103,7 @@ exports.getCVSs = function(cb){
  * @param cb
  */
 exports.getCVS = function(id, cb){
+    if (!id) return cb(false);
     DB.query('SELECT * FROM versions WHERE id = ' + id,
             function(err, results, fields){
                 if (!results.length) return cb(false);

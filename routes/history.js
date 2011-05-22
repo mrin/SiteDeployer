@@ -2,7 +2,7 @@ var user = require('../models/user.js');
 var history = require('../models/history.js');
 var project = require('../models/project.js');
 
-module.exports = function Project(app) {
+module.exports = function History(app) {
 
     app.get('/history/:projectId', user.restrict, function(req, res){
         project.getProject(req.params.projectId, function(p){

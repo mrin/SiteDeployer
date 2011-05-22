@@ -1,7 +1,8 @@
 var user = require('../models/user.js');
 var cvs = require('../models/cvs.js');
+var project = require('../models/project.js');
 
-module.exports = function Project(app) {
+module.exports = function CVS(app) {
 
     app.get('/cvs', user.restrict, function(req, res){
         cvs.getCVSs(function(rows){
@@ -48,6 +49,7 @@ module.exports = function Project(app) {
             c = cvs.fillObject(c, req.body.cvs);
             c.save(function(isSuccess){
                 if (isSuccess) {
+                    project.updateDeployTemplates(req.params.id);
                     req.flash('info', 'CVS information has been successfully saved!');
                 } else {
                     req.flash('error', 'DB error');

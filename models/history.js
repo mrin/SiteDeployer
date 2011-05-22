@@ -13,7 +13,7 @@ var History = exports = module.exports = function History(){
     this.user_id = 0;
     this.status = 0;
 
-    this.date = '';
+    this.date = null;
     this.revision = '';
     this.logs = '';
 };
@@ -23,27 +23,26 @@ var History = exports = module.exports = function History(){
  * @param cb
  */
 History.prototype.save = function(cb){
-    if (3 >= this.name.length) return false;
-
-    var updateFields = Array();
-    for (var fieldName in this) {
-        if('id' == fieldName) continue;
-        var value = this[fieldName];
-        if (null != value && (typeof value == 'number' || typeof value == 'string')) {
-            updateFields.push(fieldName + ' = \'' + this[fieldName] + '\'');
-        }
-    }
-
+    var self = this;
     if (0 == this.id) {
-        DB.query('INSERT INTO project_history SET ' + updateFields.join(','), function(err, results, fields){
+        DB.query('INSERT INTO project_history SET project_id = ?, user_id= ?, status = ?, date = ?, revision = ?, logs= ?',
+                [this.project_id, this.user_id, this.status, this.date, this.revision, this.logs],
+                function(err, results, fields){
                     cb(results.insertId);
-                    });
+                    self.id = results.insertId;
+                }
+        );
     } else {
-        DB.query('UPDATE project_history SET ' + updateFields.join(',') +
-                  'WHERE id = ' + this.id,
+        DB.query('UPDATE project_history SET project_id = ?, user_id= ?, status = ?, date = ?, revision = ?, logs= ? WHERE id = ?',
+                     [this.project_id, this.user_id, this.status, this.date, this.revision, this.logs, this.id],
                   function(err, results, fields){
+                  if (err) {
+                      console.log('History is not updated', err);
+                      return cb(false);
+                  }
+                  else
                      cb(results.affectedRows);
-                  });
+        });
     }
 };
 
