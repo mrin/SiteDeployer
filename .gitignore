@@ -7,3 +7,4 @@ logs/*
 pids/*
 public/_src/
 nodemon
+deploy_templates
